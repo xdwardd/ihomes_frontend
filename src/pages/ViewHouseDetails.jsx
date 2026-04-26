@@ -21,8 +21,8 @@ import Loader from "../utils/Loader";
 
 const ViewHouseDetails = () => {
   const { id } = useParams();
-  // const stripe = useStripe();
-  // const elements = useElements();
+  const stripe = useStripe();
+  const elements = useElements();
 
   const loggedUser = JSON.parse(localStorage.getItem("loggedInUser"));
   const navigate = useNavigate();
@@ -68,30 +68,30 @@ const ViewHouseDetails = () => {
     );
   };
 
-  // const payInStripe = async (e) => {
-  //   e.preventDefault();
+  const payInStripe = async (e) => {
+    e.preventDefault();
 
-  //   setLoading(true);
-  //   const { data } = await axios.post(
-  //     "http://localhost:3000/create-payment-intent",
-  //     { amount: details?.monthly_price * 100 }, // Stripe expects amount in cents
-  //   );
+    setLoading(true);
+    const { data } = await axios.post(
+      "http://localhost:3000/create-payment-intent",
+      { amount: details?.monthly_price * 100 }, // Stripe expects amount in cents
+    );
 
-  //   const result = await stripe.confirmCardPayment(data.clientSecret, {
-  //     payment_method: {
-  //       card: elements.getElement(CardElement),
-  //     },
-  //   });
+    const result = await stripe.confirmCardPayment(data.clientSecret, {
+      payment_method: {
+        card: elements.getElement(CardElement),
+      },
+    });
 
-  //   if (result.paymentIntent?.status === "succeeded") {
-  //     await insertReservation();
+    if (result.paymentIntent?.status === "succeeded") {
+      await insertReservation();
 
-  //     setTimeout(() => {
-  //       toast.success("Payment successful!");
-  //       navigate("/user/dashboard");
-  //     }, 3000);
-  //   }
-  // };
+      setTimeout(() => {
+        toast.success("Payment successful!");
+        navigate("/user/dashboard");
+      }, 3000);
+    }
+  };
   console.log(details);
 
   return (
